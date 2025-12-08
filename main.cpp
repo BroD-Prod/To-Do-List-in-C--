@@ -51,7 +51,14 @@ class task {
 };
 
 int main(){
-    task myTask("Finish Project", "Complete the C++ project by the end of the week", "2024-06-30");
+    std::string name, description, due_date;
+    std::cout << "Enter task name: ";
+    std::getline(std::cin, name);
+    std::cout << "Enter task description: ";
+    std::getline(std::cin, description);
+    std::cout << "Enter task due date (YYYY-MM-DD): ";
+    std::getline(std::cin, due_date);
+    task myTask(name, description, due_date);
     std::cout << myTask.to_string();
     return 0;
 }
