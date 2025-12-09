@@ -6,12 +6,21 @@ class task {
         std::string description;
         std::string due_date;
         bool completed;
+        int id;
+        static int next_id;
     
     public:
-        task(std::string name, std::string description, std::string due_date, bool completed = false)
-            : name(name), description(description), due_date(due_date), completed(completed) {
-
+        task(int id,std::string name, std::string description, std::string due_date, bool completed = false)
+            : id(id), name(name), description(description), due_date(due_date), completed(completed) {
             }
+
+        int get_id() const {
+            return id;
+        }
+
+        int get_next_id(){
+            return id++;
+        }
 
         std::string get_name() const {
             return name;
@@ -45,12 +54,34 @@ class task {
             completed = true;
         }
 
-        std:: string to_string() const {
+        std::string to_string() const {
             return "Task: " + name + "\nDescription: " + description + "\nDue Date: " + due_date + "\nCompleted: " + (completed ? "Yes" : "No") + "\n";
         }
 };
 
+class taskList {
+    private:
+        std::vector<task> tasks;
+    
+    public:
+        taskList() = default;
+
+        void add_task(const task& new_task) {
+            tasks.push_back(new_task);
+        }
+
+        void remove_task(const task& t){
+            tasks.erase(std::remove_if(tasks.begin(), tasks.end(), [&t](const task& task) {
+                return task.get_id() == t.get_id();
+            }
+        ), 
+            tasks.end());
+        }  
+};
+
 int main(){
+    int id = 1; // Starting ID for tasks
+    taskList myTaskList;
     std::string name, description, due_date;
     std::cout << "Enter task name: ";
     std::getline(std::cin, name);
@@ -58,7 +89,8 @@ int main(){
     std::getline(std::cin, description);
     std::cout << "Enter task due date (YYYY-MM-DD): ";
     std::getline(std::cin, due_date);
-    task myTask(name, description, due_date);
+    task myTask(id, name, description, due_date);
     std::cout << myTask.to_string();
+    myTaskList.add_task(myTask);
     return 0;
 }
