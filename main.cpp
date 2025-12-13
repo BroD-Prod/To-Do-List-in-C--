@@ -55,7 +55,7 @@ class task {
         }
 
         std::string to_string() const {
-            return "Task: " + name + "\nDescription: " + description + "\nDue Date: " + due_date + "\nCompleted: " + (completed ? "Yes" : "No") + "\n";
+            return "Task: \n" "ID: " + std::to_string(id) + "\nName: " + name + "\nDescription: " + description + "\nDue Date: " + due_date + "\nCompleted: " + (completed ? "Yes" : "No") + "\n";
         }
 };
 
@@ -76,21 +76,68 @@ class taskList {
             }
         ), 
             tasks.end());
-        }  
+    }
+        void print_tasks(){
+            for(const task& t : tasks){
+                std::cout << t.to_string() << std::endl;
+            }
+        }
+
+        std::vector<task>& get_tasks(){
+            return tasks;
+        }
 };
 
 int main(){
     int id = 1; // Starting ID for tasks
     taskList myTaskList;
+    int choice;
     std::string name, description, due_date;
-    std::cout << "Enter task name: ";
-    std::getline(std::cin, name);
-    std::cout << "Enter task description: ";
-    std::getline(std::cin, description);
-    std::cout << "Enter task due date (YYYY-MM-DD): ";
-    std::getline(std::cin, due_date);
-    task myTask(id, name, description, due_date);
-    std::cout << myTask.to_string();
-    myTaskList.add_task(myTask);
+    while(true){
+        std::cout << "Select an option: " << std::endl;
+        std::cout << "1. Create New Task" << std::endl; 
+        std::cout << "2. Delete a Task" << std::endl; 
+        std::cout << "3. View All Tasks" << std::endl;
+        std::cout << "4. Quit" << std::endl; 
+        std::cin >> choice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if(choice == 1){
+            std::cout << "Enter task name: " << std::endl;
+            std::getline(std::cin, name);
+            std::cout << "Enter task description: " << std::endl;
+            std::getline(std::cin, description);
+            std::cout << "Enter task due date (YYYY-MM-DD): " << std::endl;
+            std::getline(std::cin, due_date);
+            task myTask(id, name, description, due_date);
+            myTaskList.add_task(myTask);
+            id++;
+        }
+        else if(choice == 2){
+            int id_choice;
+            std::cout << "Please enter the id of the task you'd like to delete: " << std::endl;
+            std::cin >> id_choice;
+            for (task &task : myTaskList.get_tasks()){
+                if(task.get_id() == id){
+                    myTaskList.remove_task(task);
+                }
+                else{
+                    std::cout << "No Task With That ID." << std::endl;
+                }
+            }
+        }
+        else if(choice == 3){
+            myTaskList.print_tasks();
+        }
+
+        else if(choice == 4){
+            break;
+        }
+
+        else{
+            std::cout << "Invalid Input. Try Again!" << std::endl;
+            continue;
+        }
+    }
+
     return 0;
 }
