@@ -71,12 +71,13 @@ class taskList {
         }
 
         void remove_task(const task& t){
-            tasks.erase(std::remove_if(tasks.begin(), tasks.end(), [&t](const task& task) {
-                return task.get_id() == t.get_id();
-            }
-        ), 
-            tasks.end());
-    }
+            auto it = std::remove_if(tasks.begin(), tasks.end(), [&](const task& task_item){
+                std::cout << typeid(task_item).name() << std::endl;
+                return task_item.get_id() == t.get_id();
+            });
+            tasks.erase(it, tasks.end());
+        }
+
         void print_tasks(){
             for(const task& t : tasks){
                 std::cout << t.to_string() << std::endl;
@@ -117,7 +118,7 @@ int main(){
             std::cout << "Please enter the id of the task you'd like to delete: " << std::endl;
             std::cin >> id_choice;
             for (task &task : myTaskList.get_tasks()){
-                if(task.get_id() == id){
+                if(task.get_id() == id_choice){
                     myTaskList.remove_task(task);
                 }
                 else{
