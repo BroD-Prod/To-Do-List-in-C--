@@ -87,7 +87,7 @@ class taskList {
         std::vector<task>& get_tasks(){
             return tasks;
         }
-};
+    };
 
 int main(){
     int id = 1; // Starting ID for tasks
@@ -99,7 +99,8 @@ int main(){
         std::cout << "1. Create New Task" << std::endl; 
         std::cout << "2. Delete a Task" << std::endl; 
         std::cout << "3. View All Tasks" << std::endl;
-        std::cout << "4. Quit" << std::endl; 
+        std::cout << "4. Mark Task Complete" << std::endl;
+        std::cout << "5. Quit" << std::endl; 
         std::cin >> choice;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if(choice == 1){
@@ -131,6 +132,17 @@ int main(){
         }
 
         else if(choice == 4){
+            int id_choice;
+            std::cout << "Please enter the id of the task you wish to mark complete: " << std::endl;
+            std::cin >> id_choice;
+            for(task &task : myTaskList.get_tasks()){
+                if(task.get_id() == id_choice){
+                    task.mark_completed();
+                }
+            }
+        }
+
+        else if(choice == 5){
             break;
         }
 
